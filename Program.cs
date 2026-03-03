@@ -3,6 +3,20 @@ using MyWebApplication.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:8080")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,7 +46,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseExceptionHandler("/Error");
 app.UseStaticFiles();
-
+app.UseCors("AllowFrontend");
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();   // use static files present in wwwwroot 
